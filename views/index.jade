@@ -1,0 +1,8 @@
+#mydiv
+
+script(type='text/javascript')
+	var socket = io.connect('http://localhost');
+	socket.on('news', function (data) {
+		$('#mydiv').append('<p>' + data + '</p>');
+	});
+	setInterval(function(){socket.emit('message')}, 2000);
