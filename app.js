@@ -48,6 +48,29 @@ app.get('/auth', function(req, res){
     res.render('auth.jade', { title: 'Auth', session_id: req.sessionID, user: req.session.user});
 });
 
+ 
+//render pages without a templating engine
+app.get('/client', function(req, res){
+				fs.readFile(__dirname + '/client.html', 'utf8', function(err, text){
+								res.send(text);
+				});
+});
+
+// need to use express url parsing
+app.get('/', function(request, response){
+				var urlObj = url.parse(request.url, true);
+				var dsanalytics_sid = urlObj.query['dsanalytics_sid'],
+				dsanalytics_vid = urlObj.query['dsanalytics_vid'];
+if (client.exists(dsanalytics_sid) == 0){
+				client.sadd(dsanalytics_sid, dsanalytics_vid, redis.print);
+}
+else{
+				client.sadd(dsanalytics_sid, dsanalytics_vid, redis.print);
+				client.expire(dsanalytics_sid, 20);
+}
+response.end();
+});
+
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
