@@ -1,0 +1,19 @@
+h1 Create an account
+
+
+form(method="post", action="/new_account")
+  .clearfix      
+    label(for="xlinput") Email
+    .input
+      input(type="text", name="user[email]", id="xlInput", class="xlarge")
+  .clearfix      
+    label(for="xlinput") Password
+    .input
+      input(type="password", name="user[password]", id="xlInput", class="xlarge")
+  .clearfix      
+    label(for="xlinput") Password Confirmation
+    .input
+      input(type="password", name="user[password_confirmation]", id="xlInput", class="xlarge")
+  .clearfix
+    #button
+      button(type="submit", class="btn primary") Login

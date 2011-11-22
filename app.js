@@ -4,7 +4,10 @@ var express = require('express'),
 	  RedisStore = require('connect-redis')(express),
 		app = module.exports = express.createServer(),
 		io = require('socket.io').listen(app),
-		parseCookie = require('connect').utils.parseCookie;
+		parseCookie = require('connect').utils.parseCookie,
+    redis = require('redis'),
+		db = redis.createClient(),
+		bcrypt = require('bcrypt');  
 
 var sessionStore = new RedisStore();
 
@@ -33,15 +36,28 @@ app.get('/login', function(req, res){
     res.render('login.jade', { title: 'My Site' });
 });
 
+app.get('/new_account', function(req, res){
+    res.render('new_account.jade', { title: 'My Site' });
+});
+
+app.post('/new_account', function(req, res){
+		var salt = bcrypt.gen_salt_sync(10), 
+				user = req.body.user.email,
+				pwd = req.body.user.password,
+				hash = bcrypt.encrypt_sync(pwd, salt);
+		db.set(user, hash);
+		res.redirect('/');
+});
+
+
 app.post('/login', function(req, res){
-  if (req.body.user.name == 'lili' && req.body.user.email == 'lolo'){
-    req.session.user = 'lili';
-    res.redirect('/auth');
-  }
-  else{
-  //  req.session.user = 'false';
-  //  res.redirect('/auth');
-  }
+	var pwd = req.body.user.password,
+			user = req.body.user.email,
+			hash = db.get(user, function(error, result){
+				if (bcrypt.compare_sync(pwd, result)){
+    			res.redirect('/auth');
+				}
+			});
 });
 
 app.get('/auth', function(req, res){

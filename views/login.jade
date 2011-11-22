@@ -2,6 +2,14 @@ h1 Jade - node template engine
 
 
 form(method="post", action="/login")
-  input(type="text", name="user[name]", style="display:block;")
-  input(type="text", name="user[email]", style="display:block;")
-  button(type="submit", class="btn primary") Login
+  .clearfix
+    label(for="xlinput") Name
+    .input
+      input(type="text", name="user[email]", id="xlInput", class="xlarge")
+  .clearfix      
+    label(for="xlinput") Email
+    .input
+      input(type="text", name="user[password]", id="xlInput", class="xlarge")
+  .clearfix
+    #button
+      button(type="submit", class="btn primary") Login
