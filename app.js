@@ -7,7 +7,8 @@ var express = require('express'),
 		parseCookie = require('connect').utils.parseCookie,
     redis = require('redis'),
 		db = redis.createClient(),
-		bcrypt = require('bcrypt');  
+		bcrypt = require('bcrypt'),  
+		fs = require('fs');
 
 var sessionStore = new RedisStore();
 
@@ -66,25 +67,23 @@ app.get('/auth', function(req, res){
 
  
 //render pages without a templating engine
-app.get('/client', function(req, res){
-				fs.readFile(__dirname + '/client.html', 'utf8', function(err, text){
-								res.send(text);
-				});
+app.get('/site', function(req, res){
+	fs.readFile(__dirname + '/site.html', 'utf8', function(err, text){
+		res.send(text);
+	});
 });
 
 // need to use express url parsing
-app.get('/', function(request, response){
-				var urlObj = url.parse(request.url, true);
-				var dsanalytics_sid = urlObj.query['dsanalytics_sid'],
-				dsanalytics_vid = urlObj.query['dsanalytics_vid'];
-if (client.exists(dsanalytics_sid) == 0){
-				client.sadd(dsanalytics_sid, dsanalytics_vid, redis.print);
-}
-else{
-				client.sadd(dsanalytics_sid, dsanalytics_vid, redis.print);
-				client.expire(dsanalytics_sid, 20);
-}
-response.end();
+app.get('/tracker', function(req, res){
+	var sid = req.query.dsanalytics_sid,
+			vid = req.query.dsanalytics_vid,
+			time = Math.round(new Date().getTime() / 1000);
+	console.log('sid: ' + sid + ' vid: ' + vid );
+	//use a UNIX-like timestamp in seconds for the score
+	db.zadd(sid, time, vid);
+	//remove all set members with a score below now minus 30 secs
+	db.zremrangebyscore(sid, 0, time - 30);
+	res.end();
 });
 
 app.listen(3000);
