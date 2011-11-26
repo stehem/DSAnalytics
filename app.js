@@ -42,21 +42,37 @@ app.get('/new_account', function(req, res){
 });
 
 app.post('/new_account', function(req, res){
-		var salt = bcrypt.gen_salt_sync(10), 
-				user = req.body.user.email,
-				pwd = req.body.user.password,
-				hash = bcrypt.encrypt_sync(pwd, salt);
-		db.set(user, hash);
-		res.redirect('/');
+	var salt = bcrypt.gen_salt_sync(10), 
+			user = req.body.user.email,
+			pwd = req.body.user.password,
+			hash = bcrypt.encrypt_sync(pwd, salt),
+			random = Math.floor(Math.random()*1000);
+	db.incr('next.user.id', function(err, result){
+		var id_count = result,
+				random_id = id_count + '' + random;
+		db.set(user + ':hash', hash, function(err, result){
+			db.set(user + ':id', random_id, function(err, result){
+				req.session.userid = random_id;
+				res.redirect('/setup');
+			});
+		});
+	});
 });
 
+app.get('/setup', function(req, res){
+	res.render('setup.jade', { title: 'Setup', userid: req.session.userid });
+});
 
 app.post('/login', function(req, res){
 	var pwd = req.body.user.password,
 			user = req.body.user.email,
-			hash = db.get(user, function(error, result){
+			hash = db.get(user + ':hash', function(error, result){
 				if (bcrypt.compare_sync(pwd, result)){
-    			res.redirect('/auth');
+					db.get(user + ':id', function(err, result){
+						req.session.userid = result;
+						req.session.user = user;
+    				res.redirect('/auth');
+					});	
 				}
 			});
 });
@@ -80,9 +96,9 @@ app.get('/tracker', function(req, res){
 			time = Math.round(new Date().getTime() / 1000);
 	console.log('sid: ' + sid + ' vid: ' + vid );
 	//use a UNIX-like timestamp in seconds for the score
-	db.zadd(sid, time, vid);
+	db.zadd('hitcount:' + sid, time, vid);
 	//remove all set members with a score below now minus 30 secs
-	db.zremrangebyscore(sid, 0, time - 30);
+	//not good, need to setup a setinterval client side to do this and put it in another place
 	res.end();
 });
 
@@ -113,4 +129,18 @@ io.set('authorization', function (data, accept) {
 io.sockets.on('connection', function (socket) {
 	var hs = socket.handshake;
   console.log('A socket with sessionID ' + hs.sessionID + ' connected!');
+  console.log('A socket with userid ' + hs.session.userid + ' connected!');
+	socket.on('hitme!', function(){
+		console.log('hitme!');
+		var time = Math.round(new Date().getTime() / 1000);
+		// erase the stuff older than 30secs before emitting
+		db.zremrangebyscore('hitcount:' + hs.session.userid, 0, time - 30, function(err, result){
+			//count the remqining set			
+			db.zcard('hitcount:' + hs.session.userid, function(err, result){
+				console.log(result);
+				socket.emit('count', { count: result });
+			});
+		});	
+	});
 });
+

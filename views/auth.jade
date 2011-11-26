@@ -1,5 +1,7 @@
 p Hello, your session id is #{session_id}, your user name is #{user}
+p Here will be the main (only!) stats page
 
 script(type='text/javascript')
-	var socket = io.connect('http://localhost');
+  var socket = io.connect('http://localhost');
+  setInterval( function(){socket.emit('hitme!')}, 5000);
 
