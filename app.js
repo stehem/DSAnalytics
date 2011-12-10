@@ -1,11 +1,14 @@
-if (process.env.REDISTOGO_URL) {
-	var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
-}
-else{
-	var redis = require("redis").createClient();
-}
+//	var redis = require('redis-url').connect('redis://redistogo:09380915e925380e031553079a14b44f@barracuda.redistogo.com:9025/');
 
-var express = require('express'),
+
+
+
+	var redis = require("redis").createClient(9025, 'barracuda.redistogo.com');
+	
+	redis.auth('redis://redistogo', '09380915e925380e031553079a14b44f');
+	
+	
+	var express = require('express'),
 		routes = require('./routes'),
 		RedisStore = require('connect-redis')(express),
 		app = module.exports = express.createServer(),
@@ -15,7 +18,12 @@ var express = require('express'),
 		bcrypt = require('bcrypt'),  
 		url = require('url');
 
-var sessionStore = new RedisStore();
+var sessionStore = new RedisStore({
+	host: 'barracuda.redistogo.com',
+	port: 9025,
+	db: 'redis://redistogo',
+	pass: '09380915e925380e031553079a14b44f'
+});
 
 app.configure(function(){
 	app.set('views', __dirname + '/views');
