@@ -1,10 +1,18 @@
+if (process.env.REDISTOGO_URL) {
+	var rtg = require("url").parse(process.env.REDISTOGO_URL);
+	var redis = require("redis").createClient(rtg.port, rtg.hostname);
+	redis.auth(rtg.auth.split(":")[1]);
+}
+else{
+var redis = require("redis");
+}
+
 var express = require('express'),
 		routes = require('./routes'),
 		RedisStore = require('connect-redis')(express),
 		app = module.exports = express.createServer(),
 		io = require('socket.io').listen(app),
 		parseCookie = require('connect').utils.parseCookie,
-		redis = require('redis'),
 		db = redis.createClient(),
 		bcrypt = require('bcrypt'),  
 		url = require('url');
@@ -31,12 +39,6 @@ app.configure('development', function(){
 
 app.configure('production', function(){
 	app.use(express.errorHandler()); 
-	var redisUrl = url.parse(process.env.REDISTOGO_URL),
-			redisAuth = redisUrl.auth.split(':');
-	app.set('redisHost', redisUrl.hostname);
-	app.set('redisPort', redisUrl.port);
-	app.set('redisDb', redisAuth[0]);
-	app.set('redisPass', redisAuth[1]);
 });
 
 app.get('/', function(req, res){
