@@ -21,6 +21,9 @@ app.configure(function(){
 	app.use(app.router);
 });
 
+var port = process.env.PORT || 3000;
+app.listen(port);
+
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
@@ -98,7 +101,6 @@ app.get('/tracker', function(req, res){
 	res.end();
 });
 
-app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 
