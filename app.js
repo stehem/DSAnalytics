@@ -1,11 +1,10 @@
-
 var express = require('express'),
-   	routes = require('./routes'),
-	  RedisStore = require('connect-redis')(express),
+		routes = require('./routes'),
+		RedisStore = require('connect-redis')(express),
 		app = module.exports = express.createServer(),
 		io = require('socket.io').listen(app),
 		parseCookie = require('connect').utils.parseCookie,
-    redis = require('redis'),
+		redis = require('redis'),
 		db = redis.createClient(),
 		bcrypt = require('bcrypt'),  
 		fs = require('fs');
@@ -13,32 +12,37 @@ var express = require('express'),
 var sessionStore = new RedisStore();
 
 app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.static(__dirname + '/public'));
-  app.use(express.cookieParser());
-  app.use(express.session({secret: 'secret', key: 'express.sid', store: sessionStore}));
-  app.use(app.router);
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'jade');
+	app.use(express.bodyParser());
+	app.use(express.methodOverride());
+	app.use(express.static(__dirname + '/public'));
+	app.use(express.cookieParser());
+	app.use(express.session({secret: 'secret', key: 'express.sid', store: sessionStore}));
+	app.use(app.router);
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+	app.use(express.errorHandler()); 
 });
 
-app.get('/', routes.index);
+app.get('/', function(req, res){
+	req.session.userid = 1111;
+	db.zcard('hitcount:1111' , function(err, result){
+		res.render('index.jade', { title: 'DS Analytics', count: result == 0 ? 1 : result });
+	});
+});
 
 app.get('/login', function(req, res){
-    res.render('login.jade', { title: 'My Site' });
+	res.render('login.jade', { title: 'My Site' });
 });
 
 app.get('/new_account', function(req, res){
-    res.render('new_account.jade', { title: 'My Site' });
+	res.render('new_account.jade', { title: 'My Site' });
 });
 
 app.post('/new_account', function(req, res){
@@ -55,7 +59,7 @@ app.post('/new_account', function(req, res){
 				req.session.userid = random_id;
 				res.redirect('/setup');
 			});
-		});
+		});	
 	});
 });
 
@@ -71,14 +75,14 @@ app.post('/login', function(req, res){
 					db.get(user + ':id', function(err, result){
 						req.session.userid = result;
 						req.session.user = user;
-    				res.redirect('/auth');
+						res.redirect('/auth');
 					});	
 				}
 			});
 });
 
 app.get('/auth', function(req, res){
-    res.render('auth.jade', { title: 'Auth', session_id: req.sessionID, user: req.session.user});
+	res.render('auth.jade', { title: 'Auth', session_id: req.sessionID, user: req.session.user});
 });
 
  
