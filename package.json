@@ -9,6 +9,5 @@
 		, "socket.io": "*"
 		, "redis": "*"
 		, "bcrypt": "*"
-		, "fs": "*"
   }
 }

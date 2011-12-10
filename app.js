@@ -6,8 +6,7 @@ var express = require('express'),
 		parseCookie = require('connect').utils.parseCookie,
 		redis = require('redis'),
 		db = redis.createClient(),
-		bcrypt = require('bcrypt'),  
-		fs = require('fs');
+		bcrypt = require('bcrypt');  
 
 var sessionStore = new RedisStore();
 
@@ -85,13 +84,6 @@ app.get('/auth', function(req, res){
 	res.render('auth.jade', { title: 'Auth', session_id: req.sessionID, user: req.session.user});
 });
 
- 
-//render pages without a templating engine
-app.get('/site', function(req, res){
-	fs.readFile(__dirname + '/site.html', 'utf8', function(err, text){
-		res.send(text);
-	});
-});
 
 // need to use express url parsing
 app.get('/tracker', function(req, res){
