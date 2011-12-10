@@ -1,4 +1,9 @@
-	var redis = require('redis-url').connect('redis://redistogo:09380915e925380e031553079a14b44f@barracuda.redistogo.com:9025/');
+if (process.env.REDISTOGO_URL) {
+	var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
+}
+else{
+	var redis = require("redis").createClient();
+}
 
 var express = require('express'),
 		routes = require('./routes'),
