@@ -2,7 +2,7 @@ if (process.env.REDISTOGO_URL) {
 	var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
 }
 else{
-	var redis = require("redis");
+	var redis = require("redis").createClient();
 }
 
 var express = require('express'),
@@ -11,7 +11,7 @@ var express = require('express'),
 		app = module.exports = express.createServer(),
 		io = require('socket.io').listen(app),
 		parseCookie = require('connect').utils.parseCookie,
-		db = redis.createClient(),
+		db = redis,
 		bcrypt = require('bcrypt'),  
 		url = require('url');
 
