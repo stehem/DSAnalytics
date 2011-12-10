@@ -1,3 +1,4 @@
 *.swp
 *.vim
 *.rdb
+node_modules
