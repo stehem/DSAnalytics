@@ -6,7 +6,8 @@ var express = require('express'),
 		parseCookie = require('connect').utils.parseCookie,
 		redis = require('redis'),
 		db = redis.createClient(),
-		bcrypt = require('bcrypt');  
+		bcrypt = require('bcrypt'),  
+		url = require('url');
 
 var sessionStore = new RedisStore();
 
