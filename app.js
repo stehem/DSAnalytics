@@ -1,5 +1,4 @@
 if (process.env.REDISTOGO_URL) {
-				lllllll	
 	var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
 }
 else{
