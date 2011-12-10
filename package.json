@@ -11,5 +11,6 @@
 		, "bcrypt": "*"
 		, "connect": "*"
 		, "url": "*"
+		, "redis-url": "*"
   }
 }
