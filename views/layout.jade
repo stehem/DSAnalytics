@@ -30,5 +30,5 @@ script(type="text/javascript")
   if (typeof dsanalytics != 'undefined') {
   dsanalytics.checkCookie();
   var pixel = new Image();
-  pixel.src = 'http://localhost:3000/tracker?dsanalytics_sid=1111&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
+  pixel.src = 'http://localhost:5000/tracker?dsanalytics_sid=1111&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
   }

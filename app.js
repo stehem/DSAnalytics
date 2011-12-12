@@ -1,29 +1,53 @@
-//	var redis = require('redis-url').connect('redis://redistogo:09380915e925380e031553079a14b44f@barracuda.redistogo.com:9025/');
+if (process.env.REDISTOGO_URL) {
+	var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
+}
+else {
+	var redis = require("redis").createClient();
+}
 
 
+//var redis = require('redis-url').connect('redis://redistogo:09380915e925380e031553079a14b44f@barracuda.redistogo.com:9025/');
 
+var	redisurl = 'redis://redistogo:09380915e925380e031553079a14b44f@barracuda.redistogo.com:9025/';
 
-	var redis = require("redis").createClient(9025, 'barracuda.redistogo.com');
-	
-	redis.auth('redis://redistogo', '09380915e925380e031553079a14b44f');
-	
 	
 	var express = require('express'),
 		routes = require('./routes'),
+		db = redis,
+		connect = require('connect'),
 		RedisStore = require('connect-redis')(express),
 		app = module.exports = express.createServer(),
 		io = require('socket.io').listen(app),
 		parseCookie = require('connect').utils.parseCookie,
-		db = redis,
 		bcrypt = require('bcrypt'),  
 		url = require('url');
 
-var sessionStore = new RedisStore({
-	host: 'barracuda.redistogo.com',
-	port: 9025,
-	db: 'redis://redistogo',
-	pass: '09380915e925380e031553079a14b44f'
+
+
+
+app.configure('development', function(){
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+
 });
+
+app.configure('production', function(){
+	app.use(express.errorHandler()); 
+    var redisUrl = url.parse(redisurl),
+        redisAuth = redisUrl.auth.split(':');
+
+    app.set('redisHost', redisUrl.hostname);
+    app.set('redisPort', redisUrl.port);
+    app.set('redisDb', redisAuth[0]);
+    app.set('redisPass', redisAuth[1]);
+
+});
+
+if (process.env.REDISTOGO_URL) {
+	var sessionStore = new RedisStore({host: app.set('redisHost'),port: app.set('redisPort'),db: app.set('redisDb'),pass: app.set('redisPass')});
+}
+else {
+	var sessionStore = new RedisStore;
+}
 
 app.configure(function(){
 	app.set('views', __dirname + '/views');
@@ -36,16 +60,10 @@ app.configure(function(){
 	app.use(app.router);
 });
 
-var port = process.env.PORT || 3000;
+
+var port = process.env.PORT || 5000;
 app.listen(port);
 
-app.configure('development', function(){
-	app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
-});
-
-app.configure('production', function(){
-	app.use(express.errorHandler()); 
-});
 
 app.get('/', function(req, res){
 	req.session.userid = 1111;
@@ -128,7 +146,7 @@ io.set('authorization', function (data, accept) {
     data.sessionStore = sessionStore;
     sessionStore.get(data.sessionID, function (err, session) {
     	if (err || !session) {
-      	accept('Error', false);
+      	accept('Errorrrrrrr', false);
     	} else {
       	data.session = new Session(data, session);
       	accept(null, true);
