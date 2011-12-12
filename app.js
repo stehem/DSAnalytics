@@ -6,9 +6,7 @@ else {
 }
 
 
-//var redis = require('redis-url').connect('redis://redistogo:09380915e925380e031553079a14b44f@barracuda.redistogo.com:9025/');
 
-var	redisurl = 'redis://redistogo:09380915e925380e031553079a14b44f@barracuda.redistogo.com:9025/';
 
 	
 	var express = require('express'),
