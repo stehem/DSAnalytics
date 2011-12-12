@@ -30,7 +30,7 @@ app.configure('development', function(){
 
 app.configure('production', function(){
 	app.use(express.errorHandler()); 
-    var redisUrl = url.parse(redisurl),
+    var redisUrl = url.parse(process.env.REDISTOGO_URL),
         redisAuth = redisUrl.auth.split(':');
 
     app.set('redisHost', redisUrl.hostname);
