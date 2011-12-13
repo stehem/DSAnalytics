@@ -1,0 +1,47 @@
+
+module.exports = function(app, db, bcrypt){
+				
+	var user = require('./models/user');
+	var tracker = require('./models/tracker');
+
+	app.get('/', function(req, res){
+		req.session.userid = 1111;
+		db.zcard('hitcount:1111' , function(err, result){
+			res.render('index.jade', { title: 'DS Analytics', count: result == 0 ? 1 : result });
+		});	
+	});
+
+	app.get('/login', function(req, res){
+		res.render('login.jade', { title: 'My Site' });
+	});
+
+	app.get('/new_account', function(req, res){
+		res.render('new_account.jade', { title: 'My Site' });
+	});
+
+
+	app.post('/new_account', function(req, res){
+		user.new(req, res, db, bcrypt, res.redirect('/setup'));
+	});
+
+
+	app.get('/setup', function(req, res){
+		res.render('setup.jade', { title: 'Setup', userid: req.session.userid });
+	});
+
+	app.post('/login', function(req, res){
+		user.login(req, res, db, bcrypt, res.redirect('/auth'));
+	});
+
+	app.get('/auth', function(req, res){
+		res.render('auth.jade', { title: 'Auth', session_id: req.sessionID, user: req.session.user});
+	});
+
+
+app.get('/tracker', function(req, res){
+	tracker.hit(req, res, db);
+	res.end();
+});
+
+
+}

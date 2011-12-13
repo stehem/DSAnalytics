@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DS Analytics - Site</title>
+ 
+</head>
+<body>
+
+<script src="/javascripts/client_min.js"></script>
+<script type="text/javascript">
+	if (typeof dsanalytics != 'undefined') {
+		dsanalytics.checkCookie();
+		var pixel = new Image();
+		pixel.src = 'http://localhost:3000/tracker?dsanalytics_sid=1163&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
+		}
+</script>
+
+
+</body>
+</html>

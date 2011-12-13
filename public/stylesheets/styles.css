@@ -1,0 +1,29 @@
+@import url(http://fonts.googleapis.com/css?family=Chewy);
+
+@import 'bootstrap.css';
+body {
+  min-height: 600px;
+  background-color: #2e2e2e;
+  padding-top: 40px;
+}
+div#main {
+  margin-top: 30px;
+}
+div.topline {
+  height: 5px;
+  background-color: #cc3f35;
+}
+div#analytics {
+  color: #E2E2B1;
+  margin-top: 30px;
+}
+.big {
+  font-family: 'Chewy', cursive;
+  font-size: 50px;
+}
+.bigger {
+  font-family: 'Chewy', cursive;
+  padding: 100px 0 100px 0;
+  margin: 50px 0 50px 0;
+  font-size: 250px;
+}
