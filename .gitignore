@@ -2,3 +2,4 @@
 *.vim
 *.rdb
 node_modules
+*.swo

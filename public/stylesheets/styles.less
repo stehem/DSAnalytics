@@ -1,35 +1,45 @@
-@import url(http://fonts.googleapis.com/css?family=Chewy);
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+@import url(http://fonts.googleapis.com/css?family=Lobster);
 @import 'bootstrap.css';
 @background: #2E2E2E;
 @topline: #CC3F35;
 @logo: #E2E2B1;
 @border-logo: #D9EEF2;
 @background-logo: white;
+@yellow: #E2E2B1;
+
 body {
 	min-height: 600px;
 	background-color: @background;
 	padding-top: 40px;
+	font-family: 'Droid Sans', sans-serif;
+}
+.topline{
+	background-color: @topline;
+	height: 5px;
+}
+.answer{
+	background-color: #F5F5F5;
 }
 div#main{
 	margin-top: 30px;
 }
-div.topbar a{
+.brand{
+	color: @yellow;
 }
 div.topline{
 	height: 5px;
 	background-color: @topline;
 }
 div#analytics {
-	color: #E2E2B1;
+	color: @yellow;
 	margin-top: 30px;
 }
 .big{
-	font-family: 'Chewy', cursive;
 	font-size: 50px;
 }
 
 .bigger{
-	font-family: 'Chewy', cursive;
 	padding: 100px 0 100px 0;
 	margin: 50px 0 50px 0;
 	font-size: 250px;
