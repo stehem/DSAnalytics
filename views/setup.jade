@@ -1,16 +1,4 @@
 p Hello, your Redis user id is #{userid}
 
 
-.input
-  textarea(class="xxlarge", id="textarea2", name="textarea2", rows="11")
-    <script src="/javascripts/client_min.js">
-    <script type="text/javascript">
-    if (typeof dsanalytics != 'undefined') {
-    dsanalytics.checkCookie();
-    var pixel = new Image();
-    pixel.src = 'http://localhost:3000/tracker?dsanalytics_sid=#{userid}&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
-    }
-    </script>
 
-  span(class="help-block") Paste this code into your code, right before the closing </body> tag
-                                                                      
