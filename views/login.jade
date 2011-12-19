@@ -1,15 +1,21 @@
-h1 Jade - node template engine
+h1 Login
+
+
+if typeof flash != 'undefined' && flash.error
+  .alert-message.alert
+    != flash.error
 
 
 form(method="post", action="/login")
   .clearfix
-    label(for="xlinput") Name
+    label(for="xlinput") Email
     .input
       input(type="text", name="user[email]", id="xlInput", class="xlarge")
   .clearfix      
-    label(for="xlinput") Email
+    label(for="xlinput") Password
     .input
       input(type="text", name="user[password]", id="xlInput", class="xlarge")
   .clearfix
-    #button
-      button(type="submit", class="btn primary") Login
+    .button_wrapper
+      #button
+        button(type="submit", class="btn primary large") Login

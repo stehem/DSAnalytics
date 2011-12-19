@@ -1,5 +1,5 @@
 
-module.exports = function(app, db, bcrypt){
+module.exports = function(app, db){
 				
 	var user = require('./models/user');
 	var tracker = require('./models/tracker');
@@ -21,7 +21,7 @@ module.exports = function(app, db, bcrypt){
 
 
 	app.post('/new_account', function(req, res){
-		user.new(req, res, db, bcrypt, res.redirect('/setup'));
+		user.new(req, res, db, function(){res.redirect('/setup')});
 	});
 
 
@@ -30,7 +30,7 @@ module.exports = function(app, db, bcrypt){
 	});
 
 	app.post('/login', function(req, res){
-		user.login(req, res, db, bcrypt, res.redirect('/auth'));
+		user.login(req, res, db, function(){res.redirect('/auth')});
 	});
 
 	app.get('/auth', function(req, res){

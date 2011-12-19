@@ -13,7 +13,6 @@ var express = require('express'),
 		app = module.exports = express.createServer(),
 		io = require('socket.io').listen(app),
 		parseCookie = require('connect').utils.parseCookie,
-		bcrypt = require('bcrypt'),  
 		url = require('url');
 
 app.configure('development', function(){
@@ -54,7 +53,7 @@ app.configure(function(){
 var port = process.env.PORT || 5000;
 app.listen(port);
 
-require('./routes')(app, db, bcrypt);
+require('./routes')(app, db);
 
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
