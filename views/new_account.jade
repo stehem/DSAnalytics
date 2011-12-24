@@ -1,5 +1,7 @@
-h1 Create an account
+.button_wrapper
+  h1 Create an account
 
+!= partial('flash');
 
 form(method="post", action="/new_account")
   .clearfix      
@@ -11,9 +13,9 @@ form(method="post", action="/new_account")
     .input
       input(type="password", name="user[password]", id="xlInput", class="xlarge")
   .clearfix      
-    label(for="xlinput") Password Confirmation
+    label(for="xlinput") Site Name
     .input
-      input(type="password", name="user[password_confirmation]", id="xlInput", class="xlarge")
-  .clearfix
+      input(type="text", name="user[sitename]", id="xlInput", class="xlarge")
+  .button_wrapper
     #button
-      button(type="submit", class="btn primary") Login
+      button(type="submit", class="btn primary large") Sign Up

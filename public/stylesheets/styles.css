@@ -11,7 +11,7 @@ body {
 }
 .topline {
   background-color: #cc3f35;
-  height: 5px;
+  height: 2px;
 }
 .answer {
   background-color: #F5F5F5;
@@ -21,10 +21,6 @@ div#main {
 }
 .brand {
   color: #e2e2b1;
-}
-div.topline {
-  height: 5px;
-  background-color: #cc3f35;
 }
 div#analytics {
   color: #e2e2b1;
@@ -40,4 +36,9 @@ div#analytics {
 }
 .button_wrapper {
   padding-left: 150px;
+}
+.login_button {
+  float: left;
+  display: inline-block;
+  margin-left: 160px;
 }

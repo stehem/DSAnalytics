@@ -1,0 +1,11 @@
+if typeof flash != 'undefined' && flash.error
+  .button_wrapper
+    .span5
+      .alert-message.alert
+        != flash.error
+
+if typeof flash != 'undefined' && flash.notice
+  .span5
+    .alert-message.success
+      != flash.notice
+

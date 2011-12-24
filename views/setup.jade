@@ -1,5 +1,7 @@
 p Hello, your Redis user id is #{userid}
 
+!= partial('flash');
+
 
 .input
   textarea(class="xxlarge", id="textarea2", name="textarea2", rows="11").
@@ -7,8 +9,8 @@ p Hello, your Redis user id is #{userid}
     <script type="text/javascript">
     if (typeof dsanalytics != 'undefined') {
     dsanalytics.checkCookie();
-    var pixel = new Image();
-    pixel.src = 'http://localhost:3000/tracker?dsanalytics_sid=#{userid}&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
+    dsanalytics.pixel = new Image();
+    dsnalytics.pixel.src = 'http://localhost:3000/tracker?dsanalytics_sid=#{userid}&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
     }
     </script>
 

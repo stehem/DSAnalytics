@@ -6,13 +6,23 @@ module.exports = function(app, db){
 
 	app.get('/', function(req, res){
 		req.session.userid = 1111;
-		db.zcard('hitcount:1111' , function(err, result){
-			res.render('index.jade', { title: 'DS Analytics', count: result == 0 ? 1 : result });
+		var time = Math.round(new Date().getTime() / 1000);
+		db.zremrangebyscore('hitcount:' + req.session.userid, 0, time - 30, function(err, result){
+			db.zcard('hitcount:1111' , function(err, result){
+				res.render('index.jade', {sitename: 'this site', title: 'DS Analytics', count: result == 0 ? 1 : result });
+			});	
 		});	
 	});
 
 	app.get('/login', function(req, res){
 		res.render('login.jade', { title: 'My Site' });
+	});
+
+
+	app.get('/logout', function(req, res){
+		req.session.user = null;
+		req.session.userid = null;
+		res.redirect('/');
 	});
 
 	app.get('/new_account', function(req, res){
@@ -33,15 +43,29 @@ module.exports = function(app, db){
 		user.login(req, res, db, function(){res.redirect('/auth')});
 	});
 
+	app.get('/logout', function(req, res){
+		req.session.userid = null;
+		req.session.user = null;;
+		res.redirect('/');
+	});
+
 	app.get('/auth', function(req, res){
-		res.render('auth.jade', { title: 'Auth', session_id: req.sessionID, user: req.session.user});
+		var time = Math.round(new Date().getTime() / 1000);
+		db.zremrangebyscore('hitcount:' + req.session.userid, 0, time - 30, function(err, result){
+			db.zcard('hitcount:' + req.session.userid, function(err, count){
+				db.get(req.session.user + ':sitename', function(err, result){
+					res.render('auth.jade', { title: 'Auth', session_id: req.sessionID, user: req.session.user, sitename: result, count: count});
+				});
+			});
+		});
 	});
 
 
-app.get('/tracker', function(req, res){
-	tracker.hit(req, res, db);
-	res.end();
-});
+	app.get('/tracker', function(req, res){
+		try {tracker.hit(req, res, db);}
+		catch (e) {}
+		finally {res.end();};
+	});
 
 
 }

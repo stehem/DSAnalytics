@@ -1,10 +1,8 @@
-h1 Login
+.button_wrapper
+  h1 Login
 
 
-if typeof flash != 'undefined' && flash.error
-  .alert-message.alert
-    != flash.error
-
+!= partial('flash');
 
 form(method="post", action="/login")
   .clearfix

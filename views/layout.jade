@@ -12,15 +12,21 @@ html
           .topbar-inner
             .container
               a(class="brand", href="#", style="color:#E2E2B1;font-family: 'Lobster', cursive;") DS Analytics
-              ul(class="nav")
+              ul(class="nav", style="float:right;")
                 li(class="active")
-                  a(href="#overview") Overview
-                li
-                  a(href="#about") About
-                li
-                  a(href="#about") About
-                li
-                  a(href="#about") About
+                  a(href="/") Home
+                if typeof current_user == 'undefined'
+                  li
+                    a(href="/new_account") Sign Up
+                  li
+                    a(href="/login") Login
+                else
+                  li
+                    a(href="/logout") Logout
+                  li
+                    a(href="/setup") Config
+
+
         #main            
           !{body}
 
@@ -28,6 +34,6 @@ script(src="/javascripts/client_min.js")
 script(type="text/javascript")
   if (typeof dsanalytics != 'undefined') {
   dsanalytics.checkCookie();
-  var pixel = new Image();
-  pixel.src = 'http://localhost:5000/tracker?dsanalytics_sid=1111&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
+  dsanalytics.pixel = new Image();
+  dsanalytics.pixel.src = 'http://localhost:5000/tracker?dsanalytics_sid=1111&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
   }

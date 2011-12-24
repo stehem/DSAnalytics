@@ -1,7 +1,9 @@
-p Hello, your session id is #{session_id}, your user name is #{user}
-p Here will be the main (only!) stats page
+!= partial('stats')
+
 
 script(type='text/javascript')
   var socket = io.connect('http://localhost');
   setInterval( function(){socket.emit('hitme!')}, 5000);
-
+  socket.on('count', function(count) {
+    $('.bigger').html(count['count']);
+  });

@@ -47,6 +47,8 @@ app.configure(function(){
 	app.use(app.router);
 	app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
   app.use(express.static(__dirname + '/public'));
+	app.dynamicHelpers({flash: function(req, res){return req.flash();}});
+	app.dynamicHelpers({current_user: function(req, res){return req.session.user;}});
 });
 
 

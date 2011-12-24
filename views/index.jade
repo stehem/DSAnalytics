@@ -1,13 +1,13 @@
-.well.answer
-  dl
-    dt DS Analytics provides the answer to the question:
-        dd How many people are on my site right now?  
-  a.btn.large.info Signup
+.row
+  .span8.offset4
+    .well.answer(style="padding: 19px 19px 49px 19px;")
+      dl
+        dt DS Analytics provides the answer to the question:
+          dd How many people are on my site right now?  
+      .login_button
+        a.btn.large.info Signup
 
-#analytics
-  span(class="big") There are about 
-  .bigger= count 
-  span(class="big") visitors active on this site right now.
+!= partial('stats')
 
 script(type='text/javascript')
   var socket = io.connect('http://localhost');
