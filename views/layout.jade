@@ -5,17 +5,17 @@ html
     link(rel='stylesheet', href='/stylesheets/styles.css')
     script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js")
     script(src='/socket.io/socket.io.js')
-    body
+    body(background="/images/broken_noise.png")
       .topline
       .container
         .topbar
           .topbar-inner
             .container
-              a(class="brand", href="#", style="color:#E2E2B1;font-family: 'Lobster', cursive;") DS Analytics
+              a(class="brand", href="/", style="color:#E2E2B1;font-family: 'Lobster', cursive;") DS Analytics
               ul(class="nav", style="float:right;")
                 li(class="active")
                   a(href="/") Home
-                if typeof current_user == 'undefined'
+                if typeof current_user == 'undefined' || current_user == null
                   li
                     a(href="/new_account") Sign Up
                   li
