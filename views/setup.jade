@@ -10,7 +10,7 @@ p Hello, your Redis user id is #{userid}
     if (typeof dsanalytics != 'undefined') {
     dsanalytics.checkCookie();
     dsanalytics.pixel = new Image();
-    dsnalytics.pixel.src = 'http://localhost:3000/tracker?dsanalytics_sid=#{userid}&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
+    dsnalytics.pixel.src = 'http://www.ds-analytics.net/tracker?dsanalytics_sid=#{userid}&dsanalytics_vid=' + dsanalytics.getCookie('dsanalytics_id');
     }
     </script>
 
