@@ -2,7 +2,7 @@
 
 
 script(type='text/javascript')
-  var socket = io.connect('http://localhost');
+  var socket = io.connect('window.location.hostname');
   setInterval( function(){socket.emit('hitme!')}, 5000);
   socket.on('count', function(count) {
     $('.bigger').html(count['count']);
