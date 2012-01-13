@@ -43,13 +43,12 @@ module.exports = function(app, db){
 		user.login(req, res, db, function(){res.redirect('/auth')});
 	});
 
-	app.get('/logout', function(req, res){
-		req.session.userid = null;
-		req.session.user = null;;
-		res.redirect('/');
-	});
 
 	app.get('/auth', function(req, res){
+		if (req.session.userid == 1111 || req.session.userid == 'undefined' || req.session.userid == null){
+			res.redirect('/');
+		}
+		else{
 		var time = Math.round(new Date().getTime() / 1000);
 		db.zremrangebyscore('hitcount:' + req.session.userid, 0, time - 30, function(err, result){
 			db.zcard('hitcount:' + req.session.userid, function(err, count){
@@ -58,6 +57,7 @@ module.exports = function(app, db){
 				});
 			});
 		});
+	}
 	});
 
 
